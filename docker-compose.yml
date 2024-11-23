@@ -1,0 +1,55 @@
+volumes:
+  dbdata:
+
+services:
+ 
+    # image project
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - laravel
+
+    # nginx
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+            - ./docker/certbot/conf:/etc/letsencrypt/
+            - ./docker/certbot/www:/var/www/certbot/
+        networks:
+            - laravel
+
+    # db mysql
+    db:
+        image: postgres
+        platform: linux/x86_64
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: "root"
+            POSTGRES_PASSWORD: "root"
+        shm_size: 1024mb
+        ports:
+            -  "5432:5432"
+        networks:
+            - laravel
+
+    certbot:
+      image: certbot/certbot
+      volumes:
+         - ./docker/certbot/conf:/etc/letsencrypt
+         - ./docker/certbot/www:/var/www/certbot    
+
+networks:
+    laravel:
+        driver: bridge
