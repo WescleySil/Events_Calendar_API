@@ -7,10 +7,10 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Services\DeleteUserService;
-use App\Services\IndexUserService;
-use App\Services\StoreUserService;
-use App\Services\UpdateUserService;
+use App\Services\User\DeleteUserService;
+use App\Services\User\IndexUserService;
+use App\Services\User\StoreUserService;
+use App\Services\User\UpdateUserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
